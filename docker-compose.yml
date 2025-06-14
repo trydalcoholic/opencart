@@ -35,6 +35,7 @@ services:
 
   adminer:
     image: adminer:latest
+    profiles: [adminer]
     environment:
       ADMINER_DEFAULT_SERVER: mysql
     depends_on:
@@ -45,14 +46,17 @@ services:
 
   redis:
     image: redis:latest
+    profiles: [redis]
     volumes:
         - redis-data:/data
 
   memcached:
     image: memcached:latest
+    profiles: [memcached]
 
   postgres:
     image: postgres:latest
+    profiles: [postgres]
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-opencart}
