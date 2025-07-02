@@ -1,4 +1,6 @@
 <?php
+define('OPENCART_START', microtime(true));
+
 // Version
 define('VERSION', '4.1.0.4');
 

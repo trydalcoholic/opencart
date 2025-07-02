@@ -1,0 +1,15 @@
+{% extends '@debug/common/layout.twig' %}
+
+{% block content %}
+  {% for frame in frames %}
+    <details class="error-frame" {{ loop.first ? 'open' : '' }} data-error-line="{{ frame.line }}" data-start-line="{{ frame.start_line }}">
+      <summary class="error-frame__summary">
+        <span class="error-frame__file">{{ frame.file }}:{{ frame.line }}</span>
+        <span class="error-frame__function">{{ frame.function }}()</span>
+      </summary>
+      <div class="error-frame__body">
+        <pre><code class="language-php">{{ frame.code }}</code></pre>
+      </div>
+    </details>
+  {% endfor %}
+{% endblock %}

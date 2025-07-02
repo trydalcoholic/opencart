@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default('Debug - OpenCart') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css" rel="stylesheet" id="hljs-theme-light">
+    <style>{{ css|raw }}</style>
+  </head>
+  <body>
+    <button class="theme-toggle theme-toggle--fixed" aria-label="Switch theme">
+      <span class="theme-toggle__icon" id="theme-toggle-icon">☀️</span>
+    </button>
+
+    {% include '@debug/common/header.twig' %}
+
+    <main class="debug-main page__container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+
+    <!-- Debug Scripts -->
+    <script>{{ js|raw }}</script>
+  </body>
+</html>

@@ -1,5 +1,7 @@
 <?php
 namespace Opencart\Catalog\Controller\Startup;
+use Opencart\System\Library\Debug;
+
 /**
  * Class Error
  *
@@ -14,8 +16,12 @@ class Error extends \Opencart\System\Engine\Controller {
 	public function index(): void {
 		$this->registry->set('log', new \Opencart\System\Library\Log($this->config->get('config_error_filename')));
 
-		set_error_handler([$this, 'error']);
-		set_exception_handler([$this, 'exception']);
+		if (class_exists(Debug::class) &&$this->config->get('config_error_display')) {
+			\Opencart\System\Library\Debug::init($this->config);
+		} else {
+			set_error_handler([$this, 'error']);
+			set_exception_handler([$this, 'exception']);
+		}
 	}
 
 	/**

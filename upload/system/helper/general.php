@@ -10,6 +10,30 @@ function oc_token(int $length = 32): string {
 	return substr(bin2hex(random_bytes($length)), 0, $length);
 }
 
+/**
+ * Dump variables and die
+ *
+ * @param  mixed  ...$vars
+ *
+ * @return void
+ * @throws ErrorException
+ */
+function dd(...$vars): void {
+	\Opencart\System\Library\Debug::dd(...$vars);
+}
+
+/**
+ * Dump variables without dying
+ *
+ * @param  mixed  ...$vars
+ *
+ * @return void
+ * @throws ErrorException
+ */
+function dump(...$vars): void {
+	\Opencart\System\Library\Debug::dump(...$vars);
+}
+
 /** @return string */
 function oc_get_ip(): string {
 	$headers = [

@@ -65,3 +65,9 @@ $_['action_event']      = [
 		1 => 'event/translation'
 	]
 ];
+
+// Debug events
+if (defined('OPENCART_DEBUG') && OPENCART_DEBUG) {
+	$_['action_event']['controller/*/before'][] = 'extension/debug/profiler.before';
+	$_['action_event']['controller/*/after'][] = 'extension/debug/profiler.after';
+}

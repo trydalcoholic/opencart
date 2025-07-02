@@ -32,31 +32,36 @@ date_default_timezone_set($config->get('date_timezone'));
 $log = new \Opencart\System\Library\Log($config->get('error_filename'));
 $registry->set('log', $log);
 
-// Error Handler
-set_error_handler(function(int $code, string $message, string $file, int $line) use ($log, $config) {
-	// error suppressed with @
-	if (!(error_reporting() & $code)) {
-		return false;
-	}
+if ($config->get('error_display')) {
+	\Opencart\System\Library\Debug::init($config);
+}
 
-	throw new \ErrorException($message, 0, $code, $file, $line);
-});
+// Error Handler
+//set_error_handler(function(int $code, string $message, string $file, int $line) use ($log, $config) {
+//	// error suppressed with @
+//	if (!(error_reporting() & $code)) {
+//		return false;
+//	}
+//
+//	throw new \ErrorException($message, 0, $code, $file, $line);
+//});
 
 // Exception Handler
-set_exception_handler(function(object $e) use ($log, $config): void {
-	$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
-
-	if ($config->get('error_log')) {
-		$log->write($message);
-	}
-
-	if ($config->get('error_display')) {
-		echo $message;
-	} else {
-		header('Location: ' . $config->get('error_page'));
-		exit();
-	}
-});
+//set_exception_handler(new \Opencart\System\Library\Debug\ExceptionHandler());
+//set_exception_handler(function(object $e) use ($log, $config): void {
+//	$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+//
+//	if ($config->get('error_log')) {
+//		$log->write($message);
+//	}
+//
+//	if ($config->get('error_display')) {
+//		echo $message;
+//	} else {
+//		header('Location: ' . $config->get('error_page'));
+//		exit();
+//	}
+//});
 
 // Event
 $event = new \Opencart\System\Engine\Event($registry);
