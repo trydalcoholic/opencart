@@ -1,23 +1,125 @@
 <?php
 namespace Opencart\Catalog\Controller\Product;
+use Exception;
+use InvalidArgumentException;
+use Opencart\System\Engine\Action;
+use Opencart\System\Engine\Controller;
+use RuntimeException;
+
 /**
  * Class Category
  *
  * @package Opencart\Catalog\Controller\Product
  */
-class Category extends \Opencart\System\Engine\Controller {
+class Category extends Controller {
 	/**
 	 * Index
 	 *
-	 * @return \Opencart\System\Engine\Action|null
+	 * @return Action|null
 	 */
-	public function index(): ?\Opencart\System\Engine\Action {
+	public function index(): ?Action {
 		$this->load->language('product/category');
 
 		if (isset($this->request->get['path'])) {
 			$path = (string)$this->request->get['path'];
 		} else {
 			$path = '';
+		}
+
+		switch ($path) {
+			case '20':
+				try {
+					throw new InvalidArgumentException('Invalid user ID provided');
+				} catch (InvalidArgumentException $e) {
+					try {
+						throw new RuntimeException('Failed to load user data', 0, $e);
+					} catch (RuntimeException $e2) {
+						throw new Exception('Service temporarily unavailable', 0, $e2);
+					}
+				}
+				break;
+
+			case '20_26':
+				(string)$this->reckuest->get['path'];
+				break;
+
+			case '20_27':
+				echo $filter;
+				break;
+
+			case '18':
+				function requiresInt(int $value) {
+					return $value * 2;
+				}
+				requiresInt("string");
+				break;
+
+			case '18_46':
+				$obj = null;
+				$obj->someMethod();
+				break;
+
+			case '18_45':
+				function recursiveFunction(): void {
+					recursiveFunction();
+				}
+				recursiveFunction();
+				break;
+
+			case '25':
+				$huge_array = [];
+				for ($i = 0; $i < 100_000_000; $i++) {
+					$huge_array[] = str_repeat('x', 1000);
+				}
+				break;
+
+			case '25_29':
+				$array = ['key1' => 'value1'];
+				echo $array['nonexistent'];
+				break;
+
+			case '25_28':
+				$not_array = "string";
+				echo $not_array[999];
+				break;
+
+			case '25_30':
+				$handle = fopen('/nonexistent/path/file.txt', 'r');
+				fread($handle, 100);
+				break;
+
+			case '25_31':
+				file_put_contents('/root/test.txt', 'data');
+				break;
+
+			case '25_32':
+				new NonExistentClass();
+				break;
+
+			case '57':
+				define('MY_CONST', 'value1');
+				define('MY_CONST', 'value2');
+				break;
+
+			case '17':
+				echo UNDEFINED_CONSTANT;
+				break;
+
+			case '24':
+				include 'nonexistent_file.php';
+				break;
+
+			case '33':
+				10 / 0;
+				break;
+
+			case '34':
+				$invalid_json = '{"invalid": json}';
+				json_decode($invalid_json, flags: JSON_THROW_ON_ERROR);
+				if (json_last_error() !== JSON_ERROR_NONE) {
+					echo "JSON Error: " . json_last_error_msg();
+				}
+				break;
 		}
 
 		if (isset($this->request->get['filter'])) {
@@ -444,7 +546,7 @@ class Category extends \Opencart\System\Engine\Controller {
 
 			$this->response->setOutput($this->load->view('product/category', $data));
 		} else {
-			return new \Opencart\System\Engine\Action('error/not_found');
+			return new Action('error/not_found');
 		}
 
 		return null;

@@ -70,3 +70,9 @@ $_['action_default']       = 'common/home';
 $_['action_error']         = 'error/not_found';
 $_['action_pre_action']    = [];
 $_['action_event']         = [];
+
+// Development
+$_['dev_editor_enabled']   = true;
+$_['dev_editor_default']   = 'phpstorm'; // phpstorm, vscode, cursor, sublimetext, zed, windsurf
+$_['dev_editor_path_from'] = ''; // Docker container path - leave empty for local development
+$_['dev_editor_path_to']   = ''; // Host filesystem path - leave empty for local development

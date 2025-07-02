@@ -1,18 +1,23 @@
 <?php
 namespace Opencart\Catalog\Controller\Startup;
+use ErrorException;
+use Opencart\System\Engine\Controller;
+use Opencart\System\Library\Log;
+use Throwable;
+
 /**
  * Class Error
  *
  * @package Opencart\Catalog\Controller\Startup
  */
-class Error extends \Opencart\System\Engine\Controller {
+class Error extends Controller {
 	/**
 	 * Index
 	 *
 	 * @return void
 	 */
 	public function index(): void {
-		$this->registry->set('log', new \Opencart\System\Library\Log($this->config->get('config_error_filename')));
+		$this->registry->set('log', new Log($this->config->get('config_error_filename')));
 
 		set_error_handler([$this, 'error']);
 		set_exception_handler([$this, 'exception']);
@@ -27,7 +32,7 @@ class Error extends \Opencart\System\Engine\Controller {
 	 * @param int    $line
 	 *
 	 * @return bool
-	 * @throws \ErrorException
+	 * @throws ErrorException
 	 */
 	public function error(int $code, string $message, string $file, int $line): bool {
 		// error suppressed with @
@@ -35,13 +40,13 @@ class Error extends \Opencart\System\Engine\Controller {
 			return false;
 		}
 
-		throw new \ErrorException($message, 0, $code, $file, $line);
+		throw new ErrorException($message, 0, $code, $file, $line);
 	}
 
 	/**
 	 * Exception
 	 *
-	 * @param \Throwable $e
+	 * @param Throwable $e
 	 *
 	 * @return void
 	 */

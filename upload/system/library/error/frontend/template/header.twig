@@ -1,0 +1,50 @@
+<header class="error-header page__container">
+  <div class="error-header__body">
+    <div class="error-header__content">
+      <div class="error-header__main">
+        <h1 class="error-header__title">{{ heading_title|default('Debug') }}</h1>
+        {% if message is defined %}
+          <p class="error-header__message">{{ message }}</p>
+        {% endif %}
+
+        {% if exceptions|length > 1 %}
+          <div class="exceptions-chain">
+            <h3 class="exceptions-chain__title">Exception Chain</h3>
+            <ol class="exceptions-chain__list">
+              {% for exception in exceptions %}
+                <li class="exceptions-chain__item {{ loop.first ? 'exceptions-chain__item--current' : '' }}">
+                  <div class="exceptions-chain__class">{{ exception.class }}</div>
+                  <div class="exceptions-chain__message">{{ exception.message }}</div>
+                  <div class="exceptions-chain__location">{{ exception.file }}:{{ exception.line }}</div>
+                </li>
+              {% endfor %}
+            </ol>
+          </div>
+        {% endif %}
+
+        {% if suggestions is defined and suggestions|length > 0 %}
+          <div class="suggestions">
+            <dl class="suggestions__list">
+              {% for suggestion in suggestions %}
+                <div class="suggestions__item">
+                  <dt class="suggestions__label">{{ suggestion.icon }} Hint</dt>
+                  <dd class="suggestions__value">{{ suggestion.text }}</dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endif %}
+      </div>
+      <div class="tech-info">
+        <dl class="tech-info__list">
+          {% for label, value in tech_info %}
+            <div class="tech-info__item">
+              <dt class="tech-info__label">{{ label }}</dt>
+              <dd class="tech-info__value">{{ value }}</dd>
+            </div>
+          {% endfor %}
+        </dl>
+      </div>
+    </div>
+  </div>
+</header>

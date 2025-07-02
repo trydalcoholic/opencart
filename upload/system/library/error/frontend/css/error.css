@@ -1,0 +1,871 @@
+@layer reset, base, themes, components, utilities;
+
+/* Reset */
+@layer reset {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Base styles */
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  }
+
+  body {
+    min-block-size: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-block: 1.25rem;
+    padding-inline: 0;
+  }
+}
+
+/* Themes with CSS Variables */
+@layer themes {
+  /* Syntax highlighting inspired by Atom One themes:
+   * Light: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css
+   * Dark: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css
+   * No external dependencies - pure CSS implementation
+   */
+
+  /* Default light theme - Atom One Light */
+  :root {
+    /* Base colors */
+    --color-bg: oklch(98% 0.005 260);
+    --color-text: oklch(20% 0.01 260);
+    --color-header-bg: oklch(70% 0.18 29);
+    --color-header-text: oklch(20% 0.01 260);
+    --color-frame-bg: oklch(96% 0.005 260);
+    --color-frame-border: oklch(90% 0.01 260);
+    --color-tech-info-bg: oklch(94% 0.01 120);
+    --color-tech-info-border: oklch(86% 0.02 120);
+    --color-tech-info-shadow: oklch(88% 0.015 260);
+    --error-line-bg: oklch(70% 0.15 340 / 0.15);
+    --error-line-num-bg: oklch(70% 0.15 340 / 0.25);
+    --error-line-num-color: oklch(60% 0.18 340);
+    --color-suggestions-bg: oklch(94% 0.01 120);
+    --color-suggestions-border: oklch(86% 0.02 120);
+    --color-suggestions-shadow: oklch(88% 0.015 120);
+
+    /* Theme switcher colors */
+    --switcher-bg: oklch(98% 0.005 260 / 0.1);
+    --switcher-border: oklch(90% 0.01 260 / 0.3);
+    --switcher-shadow-light: oklch(20% 0.01 260 / 0.1);
+    --switcher-shadow-dark: oklch(20% 0.01 260 / 0.05);
+    --switcher-highlight: oklch(100% 0 0 / 0.2);
+
+    /* Syntax highlighting - Atom One Light */
+    --color-keyword: oklch(42% 0.095 320);
+    --color-control: oklch(42% 0.095 320);
+    --color-string: oklch(42% 0.12 142);
+    --color-string-literal: oklch(35% 0.12 220);
+    --color-variable: oklch(35% 0.25 65);
+    --color-number: oklch(35% 0.25 65);
+    --color-comment: oklch(72% 0.015 260);
+    --color-builtin: oklch(45% 0.18 65);
+    --color-literal: oklch(25% 0.12 220);
+    --color-deletion: oklch(52% 0.15 25);
+    --color-tag: oklch(42% 0.095 320);
+  }
+
+  /* Automatic dark theme - Atom One Dark (#abb2bf base, #282c34 bg) */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Base colors */
+      --color-bg: oklch(18% 0.01 260);
+      --color-text: oklch(95% 0.01 260);
+      --color-header-bg: oklch(55% 0.18 29);
+      --color-header-text: oklch(100% 0.01 29);
+      --color-tech-info-bg: oklch(20% 0.015 120);
+      --color-tech-info-border: oklch(28% 0.02 120);
+      --color-tech-info-shadow: oklch(16% 0.01 260);
+      --color-frame-bg: oklch(24% 0.01 260);
+      --color-frame-border: oklch(35% 0.01 260);
+      --error-line-bg: oklch(40% 0.15 340 / 0.18);
+      --error-line-num-bg: oklch(40% 0.15 340 / 0.32);
+      --error-line-num-color: oklch(70% 0.18 340);
+      --color-suggestions-bg: oklch(20% 0.015 120);
+      --color-suggestions-border: oklch(28% 0.02 120);
+      --color-suggestions-shadow: oklch(16% 0.01 120);
+
+      /* Theme switcher colors for dark */
+      --switcher-bg: oklch(20% 0.01 260 / 0.1);
+      --switcher-border: oklch(35% 0.01 260 / 0.3);
+      --switcher-shadow-light: oklch(0% 0 0 / 0.3);
+      --switcher-shadow-dark: oklch(0% 0 0 / 0.2);
+      --switcher-highlight: oklch(100% 0 0 / 0.05);
+
+      /* Syntax highlighting - Atom One Dark */
+      --color-keyword: oklch(75% 0.12 320);
+      --color-control: oklch(75% 0.12 320);
+      --color-string: oklch(72% 0.10 142);
+      --color-string-literal: oklch(70% 0.12 220);
+      --color-variable: oklch(75% 0.12 65);
+      --color-number: oklch(75% 0.12 65);
+      --color-comment: oklch(55% 0.08 260);
+      --color-builtin: oklch(82% 0.10 65);
+      --color-literal: oklch(68% 0.08 200);
+      --color-deletion: oklch(72% 0.12 25);
+      --color-tag: oklch(75% 0.12 320);
+    }
+  }
+
+  /* Forced light theme */
+  .theme_light {
+    color-scheme: light;
+    --color-bg: oklch(98% 0.005 260);
+    --color-text: oklch(20% 0.01 260);
+    --color-header-bg: oklch(70% 0.18 29);
+    --color-header-text: oklch(20% 0.01 260);
+    --color-frame-bg: oklch(96% 0.005 260);
+    --color-frame-border: oklch(90% 0.01 260);
+    --color-tech-info-bg: oklch(94% 0.01 120);
+    --color-tech-info-border: oklch(86% 0.02 120);
+    --color-tech-info-shadow: oklch(88% 0.015 260);
+    --error-line-bg: oklch(70% 0.15 340 / 0.15);
+    --error-line-num-bg: oklch(70% 0.15 340 / 0.25);
+    --error-line-num-color: oklch(60% 0.18 340);
+    --color-suggestions-bg: oklch(94% 0.01 120);
+    --color-suggestions-border: oklch(86% 0.02 120);
+    --color-suggestions-shadow: oklch(88% 0.015 120);
+
+    /* Theme switcher colors for light */
+    --switcher-bg: oklch(98% 0.005 260 / 0.1);
+    --switcher-border: oklch(90% 0.01 260 / 0.3);
+    --switcher-shadow-light: oklch(20% 0.01 260 / 0.1);
+    --switcher-shadow-dark: oklch(20% 0.01 260 / 0.05);
+    --switcher-highlight: oklch(100% 0 0 / 0.2);
+
+    /* Syntax highlighting - Atom One Light */
+    --color-keyword: oklch(42% 0.095 320);
+    --color-control: oklch(42% 0.095 320);
+    --color-string: oklch(42% 0.12 142);
+    --color-string-literal: oklch(35% 0.12 220);
+    --color-variable: oklch(35% 0.25 65);
+    --color-number: oklch(35% 0.25 65);
+    --color-comment: oklch(72% 0.015 260);
+    --color-builtin: oklch(45% 0.18 65);
+    --color-literal: oklch(25% 0.12 220);
+    --color-deletion: oklch(52% 0.15 25);
+    --color-tag: oklch(42% 0.095 320);
+  }
+
+  /* Forced dark theme */
+  .theme_dark {
+    color-scheme: dark;
+    --color-bg: oklch(18% 0.01 260);
+    --color-text: oklch(95% 0.01 260);
+    --color-header-bg: oklch(55% 0.18 29);
+    --color-header-text: oklch(100% 0.01 29);
+    --color-tech-info-bg: oklch(20% 0.015 120);
+    --color-tech-info-border: oklch(28% 0.02 120);
+    --color-tech-info-shadow: oklch(16% 0.01 260);
+    --color-frame-bg: oklch(24% 0.01 260);
+    --color-frame-border: oklch(35% 0.01 260);
+    --error-line-bg: oklch(40% 0.15 340 / 0.18);
+    --error-line-num-bg: oklch(40% 0.15 340 / 0.32);
+    --error-line-num-color: oklch(70% 0.18 340);
+    --color-suggestions-bg: oklch(20% 0.015 120);
+    --color-suggestions-border: oklch(28% 0.02 120);
+    --color-suggestions-shadow: oklch(16% 0.01 120);
+
+    /* Theme switcher colors for dark */
+    --switcher-bg: oklch(20% 0.01 260 / 0.1);
+    --switcher-border: oklch(35% 0.01 260 / 0.3);
+    --switcher-shadow-light: oklch(0% 0 0 / 0.3);
+    --switcher-shadow-dark: oklch(0% 0 0 / 0.2);
+    --switcher-highlight: oklch(100% 0 0 / 0.05);
+
+    /* Syntax highlighting - Atom One Dark */
+    --color-keyword: oklch(75% 0.12 320);
+    --color-control: oklch(75% 0.12 320);
+    --color-string: oklch(72% 0.10 142);
+    --color-string-literal: oklch(70% 0.12 220);
+    --color-variable: oklch(75% 0.12 65);
+    --color-number: oklch(75% 0.12 65);
+    --color-comment: oklch(55% 0.08 260);
+    --color-builtin: oklch(82% 0.10 65);
+    --color-literal: oklch(68% 0.08 200);
+    --color-deletion: oklch(72% 0.12 25);
+    --color-tag: oklch(75% 0.12 320);
+  }
+}
+
+/* Components */
+@layer components {
+  /* Body styling */
+  body {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+
+  /* Layout */
+  .page__container {
+    inline-size: 100%;
+    padding-inline: max(1rem, calc(50vi - 36rem + 2rem));
+  }
+
+  /* Header */
+  .error-header {
+    word-break: break-all;
+  }
+
+  .error-header__body {
+    background-color: var(--color-header-bg);
+    color: var(--color-header-text);
+    padding: 1.25rem;
+    border-radius: 0.375rem;
+  }
+
+  .error-header__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .error-header__main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .error-header__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-wrap: balance;
+  }
+
+  .error-header__message {
+    margin: 0;
+    color: inherit;
+    text-wrap: pretty;
+  }
+
+  /* Technical info */
+  .tech-info {
+    background: var(--color-tech-info-bg);
+    padding: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-tech-info-border);
+    flex-shrink: 0;
+    inline-size: 100%;
+    box-shadow:
+        inset 0 3px 6px var(--color-tech-info-shadow),
+        inset 0 1px 0 var(--switcher-highlight),
+        0 2px 4px var(--color-frame-border);
+  }
+
+  .tech-info__list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tech-info__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .tech-info__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tech-info__value {
+    font-size: 0.875rem;
+    margin: 0;
+    word-break: break-all;
+    font-family: inherit;
+    color: var(--color-text);
+  }
+
+  /* Theme switcher - Dock style */
+  .theme-switcher {
+    position: fixed;
+    inset-block-end: 1.5rem;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+
+    /* Dock styling with CSS variables */
+    background: var(--switcher-bg);
+    backdrop-filter: blur(12px) saturate(200%);
+    border: 1px solid var(--switcher-border);
+    border-radius: 2rem;
+    padding: 0.5rem;
+
+    /* Layout */
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0;
+
+    /* Shadows and effects using variables */
+    box-shadow:
+        0 8px 32px var(--switcher-shadow-light),
+        0 2px 8px var(--switcher-shadow-dark),
+        inset 0 1px 0 var(--switcher-highlight);
+
+    /* Smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hover effect for entire dock */
+  .theme-switcher:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow:
+        0 12px 40px var(--switcher-shadow-light),
+        0 4px 12px var(--switcher-shadow-dark),
+        inset 0 1px 0 var(--switcher-highlight);
+  }
+
+  /* Legend (hidden) */
+  .theme-switcher__legend {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Radio buttons */
+  .theme-switcher__radio {
+    appearance: none;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+
+    /* Smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Interactive states */
+    background: transparent;
+    color: var(--color-text);
+    opacity: 0.6;
+  }
+
+  /* Hover effects */
+  .theme-switcher__radio:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  /* Focus styles */
+  .theme-switcher__radio:focus-visible {
+    outline: 2px solid var(--color-header-bg);
+    outline-offset: 2px;
+  }
+
+  /* Active/checked state */
+  .theme-switcher__radio:checked {
+    opacity: 1;
+    color: var(--color-header-text);
+  }
+
+  /* Icons for radio buttons */
+  .theme-switcher__radio::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--color-text);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+
+  .theme-switcher__radio--light::before {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg>');
+  }
+
+  .theme-switcher__radio--system::before {
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 5V16H20V5H4ZM2 4.00748C2 3.45107 2.45531 3 2.9918 3H21.0082C21.556 3 22 3.44892 22 4.00748V18H2V4.00748ZM1 19H23V21H1V19Z"></path></svg>');
+  }
+
+  .theme-switcher__radio--dark::before {
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6C10 10.4183 13.5817 14 18 14C19.4386 14 20.7885 13.6203 21.9549 12.9556C21.4738 18.0302 17.2005 22 12 22C6.47715 22 2 17.5228 2 12C2 6.79948 5.9698 2.52616 11.0444 2.04507C10.3797 3.21152 10 4.56142 10 6ZM4 12C4 16.4183 7.58172 20 12 20C14.9654 20 17.5757 18.3788 18.9571 15.9546C18.6407 15.9848 18.3214 16 18 16C12.4772 16 8 11.5228 8 6C8 5.67863 8.01524 5.35933 8.04536 5.04293C5.62119 6.42426 4 9.03458 4 12ZM18.1642 2.29104L19 2.5V3.5L18.1642 3.70896C17.4476 3.8881 16.8881 4.4476 16.709 5.16417L16.5 6H15.5L15.291 5.16417C15.1119 4.4476 14.5524 3.8881 13.8358 3.70896L13 3.5V2.5L13.8358 2.29104C14.5524 2.1119 15.1119 1.5524 15.291 0.835829L15.5 0H16.5L16.709 0.835829C16.8881 1.5524 17.4476 2.1119 18.1642 2.29104ZM23.1642 7.29104L24 7.5V8.5L23.1642 8.70896C22.4476 8.8881 21.8881 9.4476 21.709 10.1642L21.5 11H20.5L20.291 10.1642C20.1119 9.4476 19.5524 8.8881 18.8358 8.70896L18 8.5V7.5L18.8358 7.29104C19.5524 7.1119 20.1119 6.5524 20.291 5.83583L20.5 5H21.5L21.709 5.83583C21.8881 6.5524 22.4476 7.1119 23.1642 7.29104Z"></path></svg>');
+  }
+
+  /* Animated indicator (the sliding background) */
+  .theme-switcher__indicator {
+    position: absolute;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 50%;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    z-index: 1;
+
+    /* Styling using variables */
+    background: linear-gradient(135deg,
+    var(--color-header-bg),
+    oklch(from var(--color-header-bg) calc(l - 0.1) c h)
+    );
+
+    /* Beautiful shadows */
+    box-shadow:
+        0 2px 8px var(--switcher-shadow-light),
+        0 1px 2px var(--switcher-shadow-dark),
+        inset 0 1px 0 var(--switcher-highlight);
+
+    /* Smooth animation */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Indicator positions */
+  .theme-switcher__radio--light:checked ~ .theme-switcher__indicator {
+    transform: translateX(0);
+  }
+
+  .theme-switcher__radio--system:checked ~ .theme-switcher__indicator {
+    transform: translateX(3rem);
+  }
+
+  .theme-switcher__radio--dark:checked ~ .theme-switcher__indicator {
+    transform: translateX(6rem);
+  }
+
+  /* Main content */
+  .debug-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  /* Error frames */
+  .error-frame {
+    background-color: var(--color-frame-bg);
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-frame-border);
+    overflow: hidden;
+  }
+
+  .error-frame[open] .error-frame__summary {
+    border-start-start-radius: 0.375rem;
+    border-start-end-radius: 0.375rem;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .error-frame__summary {
+    padding: 1rem;
+    border-block-end: 1px solid var(--color-frame-border);
+    cursor: pointer;
+    background-color: var(--color-frame-bg);
+    border-radius: 0.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .error-frame__file {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .error-frame__function {
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  .error-frame__body {
+    padding: 0;
+    background: var(--color-bg);
+  }
+
+  /* Code display - Atom One inspired, no external dependencies */
+  .code-lines {
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 1em;
+    line-height: 1.25em;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg);
+    overflow-x: auto;
+  }
+
+  .code-line {
+    display: flex;
+    align-items: flex-start;
+    min-block-size: 1.25rem;
+  }
+
+  .code-line--error {
+    background: var(--error-line-bg);
+  }
+
+  .code-line:hover .editor-link svg {
+    visibility: visible;
+  }
+
+  .editor-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    inline-size: 1.5rem;
+    block-size: 1.25em;
+    flex-shrink: 0;
+  }
+
+  .code-line--error .editor-link {
+    background: var(--error-line-num-bg);
+  }
+
+  .editor-link svg {
+    visibility: hidden;
+    border-radius: 100%;
+    inline-size: 1em;
+    block-size: 1em;
+    background: var(--error-line-num-bg);
+    fill: var(--error-line-num-color);
+  }
+
+  .code-line__number {
+    inline-size: 3rem;
+    text-align: end;
+    padding-inline-end: 0.75rem;
+    padding-inline-start: 0.5rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+    user-select: none;
+    border-inline-end: 1px solid var(--color-frame-border);
+    color: var(--color-text);
+  }
+
+  .code-line__content {
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 0.5rem;
+    flex: 1;
+    white-space: pre;
+    position: relative;
+    color: var(--color-text);
+  }
+
+  .code-line--error .code-line__number {
+    background: var(--error-line-num-bg);
+    color: var(--error-line-num-color);
+    font-weight: 900;
+    opacity: 1;
+  }
+
+  .code-line--error .code-line__content::before {
+    content: "→";
+    position: absolute;
+    inset-inline-start: 0.25rem;
+    color: var(--error-line-num-color);
+    font-weight: 900;
+  }
+
+  .code-line--error .code-line__content {
+    font-weight: 900;
+  }
+
+  /* Syntax highlighting tokens - Atom One inspired */
+  .code-line__token--keyword,
+  .code-line__token--control,
+  .code-line__token--builtin,
+  .code-line__token--string-literal,
+  .code-line__token--literal,
+  .code-line__token--number,
+  .code-line__token--variable {
+    font-weight: 600;
+  }
+
+  .code-line__token--comment {
+    font-style: italic;
+  }
+
+  .code-line__token--keyword {
+    color: var(--color-keyword);
+  }
+
+  .code-line__token--control {
+    color: var(--color-control);
+  }
+
+  .code-line__token--string {
+    color: var(--color-string);
+  }
+
+  .code-line__token--string-literal {
+    color: var(--color-string-literal);
+  }
+
+  .code-line__token--variable {
+    color: var(--color-variable);
+  }
+
+  .code-line__token--number {
+    color: var(--color-number);
+  }
+
+  .code-line__token--comment {
+    color: var(--color-comment);
+  }
+
+  .code-line__token--builtin {
+    color: var(--color-builtin);
+  }
+
+  .code-line__token--literal {
+    color: var(--color-literal);
+  }
+
+  .code-line__token--deletion {
+    color: var(--color-deletion);
+  }
+
+  .code-line__token--tag {
+    color: var(--color-tag);
+  }
+
+  /* Suggestions */
+  .suggestions {
+    background: var(--color-suggestions-bg);
+    padding: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-suggestions-border);
+    margin-block-start: auto;
+    box-shadow:
+        inset 0 3px 6px var(--color-suggestions-shadow),
+        inset 0 1px 0 var(--switcher-highlight),
+        0 2px 4px var(--color-suggestions-border);
+  }
+
+  .suggestions__list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .suggestions__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .suggestions__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .suggestions__value {
+    font-size: 0.875rem;
+    margin: 0;
+    word-break: break-all;
+    font-family: inherit;
+    color: var(--color-text);
+  }
+
+  /* Exceptions chain */
+  .exceptions-chain {
+    background: var(--color-suggestions-bg);
+    padding: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-suggestions-border);
+    margin-block-start: 1rem;
+    box-shadow:
+        inset 0 3px 6px var(--color-suggestions-shadow),
+        inset 0 1px 0 var(--switcher-highlight),
+        0 2px 4px var(--color-suggestions-border);
+  }
+
+  .exceptions-chain__title {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .exceptions-chain__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: exception-counter;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .exceptions-chain__item {
+    counter-increment: exception-counter;
+    position: relative;
+    padding: 0.75rem;
+    padding-inline-start: 2rem;
+    background: var(--color-frame-bg);
+    border: 1px solid var(--color-frame-border);
+    border-radius: 0.25rem;
+  }
+
+  .exceptions-chain__item--current {
+    background: var(--error-line-bg);
+    border-color: var(--error-line-num-color);
+  }
+
+  .exceptions-chain__item--current::before {
+    background: var(--error-line-num-color);
+    color: var(--color-bg);
+  }
+
+  .exceptions-chain__item--current .exceptions-chain__class {
+    color: var(--error-line-num-color);
+    font-weight: 800;
+  }
+
+  .exceptions-chain__item::before {
+    content: counter(exception-counter);
+    position: absolute;
+    inset-inline-start: 0.5rem;
+    inset-block-start: 0.75rem;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    background: var(--color-header-bg);
+    color: var(--color-header-text);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .exceptions-chain__class {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin-block-end: 0.25rem;
+  }
+
+  .exceptions-chain__message {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin-block-end: 0.5rem;
+    text-wrap: pretty;
+  }
+
+  .exceptions-chain__location {
+    font-size: 0.75rem;
+    color: var(--color-text);
+    opacity: 0.7;
+    font-family: inherit;
+  }
+}
+
+/* Utilities and responsive */
+@layer utilities {
+  /* Responsive adjustments */
+  @media (width >= 768px) {
+    .error-header__content {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .tech-info {
+      min-inline-size: 280px;
+      inline-size: auto;
+      align-self: start;
+      position: sticky;
+      inset-block-start: 1.25rem;
+    }
+  }
+
+  @media (width <= 480px) {
+    .theme-switcher {
+      inset-block-end: 1rem;
+      padding: 0.375rem;
+      gap: 0.375rem;
+    }
+
+    .theme-switcher__radio {
+      inline-size: 2.25rem;
+      block-size: 2.25rem;
+      font-size: 0.875rem;
+    }
+
+    .theme-switcher__indicator {
+      inline-size: 2.25rem;
+      block-size: 2.25rem;
+      inset-block-start: 0.375rem;
+      inset-inline-start: 0.375rem;
+    }
+
+    .theme-switcher__radio--system:checked ~ .theme-switcher__indicator {
+      transform: translateX(2.625rem);
+    }
+
+    .theme-switcher__radio--dark:checked ~ .theme-switcher__indicator {
+      transform: translateX(5.25rem);
+    }
+  }
+
+  /* Animation preferences */
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-switcher__indicator {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-switcher {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+}

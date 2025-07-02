@@ -1,5 +1,7 @@
 <?php
 namespace Opencart\Catalog\Controller\Common;
+use Opencart\System\Engine\Controller;
+
 /**
  * Class Home
  *
@@ -7,7 +9,7 @@ namespace Opencart\Catalog\Controller\Common;
  *
  * @package Opencart\Catalog\Controller\Common
  */
-class Home extends \Opencart\System\Engine\Controller {
+class Home extends Controller {
 	/**
 	 * Index
 	 *
