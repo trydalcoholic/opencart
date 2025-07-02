@@ -45,20 +45,24 @@ set_error_handler(function(int $code, string $message, string $file, int $line) 
 });
 
 // Exception Handler
-set_exception_handler(function(object $e) use ($log, $config): void {
-	$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+$exception_handler = new \Opencart\System\Library\Exception\Handler($config, $log);
+$registry->set('exception_handler', $exception_handler);
 
-	if ($config->get('error_log')) {
-		$log->write($message);
-	}
-
-	if ($config->get('error_display')) {
-		echo $message;
-	} else {
-		header('Location: ' . $config->get('error_page'));
-		exit();
-	}
-});
+set_exception_handler([$exception_handler, 'handle']);
+//set_exception_handler(function(object $e) use ($log, $config): void {
+//	$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+//
+//	if ($config->get('error_log')) {
+//		$log->write($message);
+//	}
+//
+//	if ($config->get('error_display')) {
+//		echo $message;
+//	} else {
+//		header('Location: ' . $config->get('error_page'));
+//		exit();
+//	}
+//});
 
 // Event
 $event = new \Opencart\System\Engine\Event($registry);

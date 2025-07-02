@@ -30,6 +30,8 @@ class Home extends \Opencart\System\Engine\Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
+				file_get_contents('nonexistent_file.txt');
+
 		$this->response->setOutput($this->load->view('common/home', $data));
 	}
 }

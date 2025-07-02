@@ -47,17 +47,23 @@ class Error extends \Opencart\System\Engine\Controller {
 	 * @return void
 	 */
 	public function exception(object $e): void {
-		$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+		$handler = $this->registry->get('exception_handler');
 
-		if ($this->config->get('config_error_log')) {
-			$this->log->write($message);
-		}
-
-		if ($this->config->get('config_error_display')) {
-			echo $message;
+		if ($handler) {
+			$handler->handle($e);
 		} else {
-			header('Location: ' . $this->config->get('error_page'));
-			exit();
+			$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+
+			if ($this->config->get('config_error_log')) {
+				$this->log->write($message);
+			}
+
+			if ($this->config->get('config_error_display')) {
+				echo $message;
+			} else {
+				header('Location: ' . $this->config->get('error_page'));
+				exit();
+			}
 		}
 	}
 }
