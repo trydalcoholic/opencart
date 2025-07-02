@@ -32,6 +32,11 @@ date_default_timezone_set($config->get('date_timezone'));
 $log = new \Opencart\System\Library\Log($config->get('error_filename'));
 $registry->set('log', $log);
 
+if ($config->get('error_display')) {
+	$exception_handler = new \Opencart\System\Library\Debug\ExceptionHandler();
+	$registry->set('exception_handler', $exception_handler);
+}
+
 // Error Handler
 set_error_handler(function(int $code, string $message, string $file, int $line) use ($log, $config) {
 	// error suppressed with @

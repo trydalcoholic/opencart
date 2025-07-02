@@ -15,7 +15,8 @@ class Error extends \Opencart\System\Engine\Controller {
 		$this->registry->set('log', new \Opencart\System\Library\Log($this->config->get('config_error_filename')));
 
 		set_error_handler([$this, 'error']);
-		set_exception_handler([$this, 'exception']);
+//		set_exception_handler([$this, 'exception']);
+		set_exception_handler(new \Opencart\System\Library\Debug\ExceptionHandler());
 	}
 
 	/**
