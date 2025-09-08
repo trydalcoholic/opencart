@@ -28,66 +28,10 @@ class Log extends \Opencart\System\Engine\Controller {
 			'href' => $this->url->link('tool/log', 'user_token=' . $this->session->data['user_token'])
 		];
 
-		if (isset($this->session->data['error'])) {
-			$data['error_warning'] = $this->session->data['error'];
+		$data['delete'] = $this->url->link('tool/log.delete', 'user_token=' . $this->session->data['user_token']);
+		$data['download'] = $this->url->link('tool/log.download', 'user_token=' . $this->session->data['user_token']);
 
-			unset($this->session->data['error']);
-		} else {
-			$data['error_warning'] = '';
-		}
-
-		$file = DIR_LOGS . $this->config->get('error_filename');
-
-		if (!is_file($file)) {
-			file_put_contents($file, '', FILE_APPEND);
-		}
-
-		$data['log'] = [];
-
-		$files = oc_directory_read(DIR_LOGS, false, '/.+\.log$/');
-
-		foreach ($files as $file) {
-			$error = '';
-
-			$filename = basename($file);
-
-			$size = filesize($file);
-
-			if ($size >= 3145728) {
-				$suffix = [
-					'B',
-					'KB',
-					'MB',
-					'GB',
-					'TB',
-					'PB',
-					'EB',
-					'ZB',
-					'YB'
-				];
-
-				$i = 0;
-
-				while (($size / 1024) > 1) {
-					$size /= 1024;
-					$i++;
-				}
-
-				$error = sprintf($this->language->get('error_size'), $filename, round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]);
-			}
-
-			$handle = fopen($file, 'r+');
-
-			$data['logs'][] = [
-				'name'     => $filename,
-				'output'   => fread($handle, 3145728),
-				'download' => $this->url->link('tool/log.download', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
-				'clear'    => $this->url->link('tool/log.clear', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
-				'error'    => $error
-			];
-
-			fclose($handle);
-		}
+		$data['list'] = $this->load->controller('tool/log.getList');
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -96,6 +40,176 @@ class Log extends \Opencart\System\Engine\Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('tool/log', $data));
+	}
+
+	/**
+	 * List
+	 *
+	 * @return void
+	 */
+	public function list(): void {
+		$this->load->language('tool/log');
+
+		$this->response->setOutput($this->load->controller('tool/log.getList'));
+	}
+
+	/**
+	 * Get List
+	 *
+	 * @return string
+	 */
+	public function getList(): string {
+		$data['logs'] = [];
+
+		$files = oc_directory_read(DIR_LOGS, false, '/\.log$/');
+
+		$total_size = 0;
+
+		foreach ($files as $file) {
+			$error = '';
+
+			$filename = basename($file);
+
+			$size = filesize($file);
+			$total_size += $size;
+
+			// Format file size
+			$suffix = [
+				'B',
+				'KB',
+				'MB',
+				'GB',
+				'TB',
+				'PB',
+				'EB',
+				'ZB',
+				'YB'
+			];
+
+			$i = 0;
+			$temp_size = $size;
+
+			while (($temp_size / 1024) > 1) {
+				$temp_size /= 1024;
+				$i++;
+			}
+
+			$formatted_size = round($temp_size, 2) . ' ' . $suffix[$i];
+
+			if ($size >= 3145728) {
+				$error = sprintf($this->language->get('error_size'), $filename, $formatted_size);
+			}
+
+			$handle = fopen($file, 'r+');
+
+			$data['logs'][] = [
+				'name'     => $filename,
+				'size'     => $formatted_size,
+				'output'   => fread($handle, 3145728),
+				'download' => $this->url->link('tool/log.download', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
+				'clear'    => $this->url->link('tool/log.clear', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
+				'delete'   => $this->url->link('tool/log.delete', 'user_token=' . $this->session->data['user_token'] . '&filename=' . $filename),
+				'error'    => $error
+			];
+
+			fclose($handle);
+		}
+
+		$suffix = [
+			'B',
+			'KB',
+			'MB',
+			'GB',
+			'TB',
+			'PB',
+			'EB',
+			'ZB',
+			'YB'
+		];
+
+		$i = 0;
+		$temp_total_size = $total_size;
+
+		while (($temp_total_size / 1024) > 1) {
+			$temp_total_size /= 1024;
+			$i++;
+		}
+
+		$data['total_size'] = round($temp_total_size, 2) . ' ' . $suffix[$i];
+
+		$date_format = $this->config->get('error_log_rotation_date_format');
+		$filename_format = $this->config->get('error_log_filename_format'); // '{filename}_{date}.{extension}'
+
+		// Preparing a dynamic pattern: replace placeholders with capture groups
+		$pattern = preg_quote($filename_format, '/');
+		$pattern = str_replace(
+			['\{filename\}', '\{date\}', '\{extension\}', '\{counter\}'],
+			['(?<filename>[^_]+)', '(?<date>.*?)', '\.(?<extension>[a-z]+)', '(?<counter>\d+)?'],
+			$pattern
+		);
+
+		$pattern = '/^' . $pattern . '$/i'; // Full pattern for the file name
+
+		$sort_priority = [];
+		$sort_time = [];
+		$sort_name = [];
+
+		foreach ($data['logs'] as $key => $log) {
+			$filepath = DIR_LOGS . $log['name'];
+
+			$error_filename = $this->config->get('error_filename');
+			$base_name = pathinfo($error_filename, PATHINFO_FILENAME);
+			$extension = pathinfo($error_filename, PATHINFO_EXTENSION);
+
+			// Check whether it is an error log (primary or rotated)
+			$match_pattern = str_replace(['(?<filename>[^_]+)', '\.(?<extension>[a-z]+)'], [preg_quote($base_name, '/'), preg_quote($extension, '/')], $pattern);
+
+			if (preg_match($match_pattern, $log['name'], $matches)) {
+				$sort_priority[$key] = 0;
+
+				$date_str = $matches['date'] ?? '';
+
+				if ($date_str) {
+					$date_time = \DateTime::createFromFormat($date_format, $date_str);
+
+					if ($date_time === false) {
+						// Fallback: try to parse as 'Y-m-d' explicitly if the config did not work
+						$date_time = \DateTime::createFromFormat('!Y-m-d', $date_str);
+					}
+
+					if ($date_time instanceof \DateTimeInterface) {
+						$sort_time[$key] = $date_time->getTimestamp();
+					} elseif (is_file($filepath)) {
+						$sort_time[$key] = filemtime($filepath);
+					} else {
+						$sort_time[$key] = 0;
+					}
+				} else {
+					// For the main log without a date — use max to keep it at the top in DESC
+					$sort_time[$key] = PHP_INT_MAX;
+				}
+			} else {
+				$sort_priority[$key] = 1;
+				$sort_time[$key] = is_file($filepath) ? filemtime($filepath) : 0;
+			}
+
+			$sort_name[$key] = $log['name'];
+		}
+
+		array_multisort(
+			$sort_priority,
+			SORT_ASC,
+			$sort_time,
+			SORT_DESC,
+			$sort_name,
+			SORT_ASC,
+			$data['logs']
+		);
+
+		$data['user_token'] = $this->session->data['user_token'];
+		$data['delete'] = $this->url->link('tool/log.delete', 'user_token=' . $this->session->data['user_token']);
+
+		return $this->load->view('tool/log_list', $data);
 	}
 
 	/**
@@ -168,6 +282,70 @@ class Log extends \Opencart\System\Engine\Controller {
 			fclose($handle);
 
 			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	/**
+	 * Delete
+	 *
+	 * @return void
+	 */
+	public function delete(): void {
+		$this->load->language('tool/log');
+
+		$json = [];
+
+		if (!$this->user->hasPermission('modify', 'tool/log')) {
+			$json['error'] = $this->language->get('error_permission');
+		}
+
+		if (isset($this->request->post['selected'])) {
+			$selected = (array)$this->request->post['selected'];
+
+			if (empty($selected)) {
+				$json['error'] = $this->language->get('error_no_selection');
+			} else {
+				$deleted_count = 0;
+				$failed_files = [];
+
+				foreach ($selected as $filename) {
+					$filename = basename($filename);
+					$file = DIR_LOGS . $filename;
+
+					if (is_file($file) && unlink($file)) {
+						$deleted_count++;
+					} else {
+						$failed_files[] = $filename;
+					}
+				}
+
+				if ($deleted_count > 0 && empty($failed_files)) {
+					$json['success'] = sprintf($this->language->get('text_delete_multiple'), $deleted_count);
+				} elseif ($deleted_count > 0 && !empty($failed_files)) {
+					$json['success'] = sprintf($this->language->get('text_delete_partial'), $deleted_count, count($failed_files));
+				} else {
+					$json['error'] = $this->language->get('error_delete');
+				}
+			}
+		} elseif (isset($this->request->get['filename'])) {
+			$filename = basename($this->request->get['filename']);
+
+			if (empty($filename)) {
+				$json['error'] = sprintf($this->language->get('error_file'), $filename);
+			} else {
+				$file = DIR_LOGS . $filename;
+
+				if (is_file($file) && unlink($file)) {
+					$json['success'] = $this->language->get('text_delete');
+				} else {
+					$json['error'] = $this->language->get('error_delete');
+				}
+			}
+		} else {
+			$json['error'] = $this->language->get('error_no_selection');
 		}
 
 		$this->response->addHeader('Content-Type: application/json');

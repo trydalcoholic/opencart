@@ -1,0 +1,291 @@
+<form id="form-log" method="post" data-oc-toggle="ajax" data-oc-load="index.php?route=tool/log.list&user_token={{ user_token }}" data-oc-target="#list">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="list-group" role="tablist">
+        <div class="list-group-item">
+          <div class="d-flex w-100 justify-content-start align-items-baseline gap-2">
+            <input class="form-check-input me-1" type="checkbox" id="input-select-all">
+            <label class="form-check-label fs-5" for="input-select-all">{{ text_select_all }}</label>
+          </div>
+          <small class="ms-auto text-body-secondary">{{ text_total_size }}: {{ total_size }}</small>
+        </div>
+        {% set i = 0 %}
+        {% for log in logs %}
+          <div class="list-group-item list-group-item-action{% if i == 0 %} active{% endif %}" id="list-log-{{ i }}-list" data-bs-toggle="list" data-bs-target="#list-log-{{ i }}" role="tab" aria-controls="list-log-{{ i }}">
+            <div class="d-flex w-100 justify-content-start align-items-center gap-2">
+              <input type="checkbox" name="selected[]" value="{{ log.name }}" class="form-check-input me-1" />
+              <span class="fw-bold text-truncate">{{ log.name }}</span>
+              <div class="d-flex align-items-center ms-auto" style="flex: 0 0 auto;">
+                <small>{{ log.size }}</small>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a href="{{ log.download }}" class="dropdown-item"><i class="fa-solid fa-download me-2"></i>{{ button_download }}</a></li>
+                    <li><button type="button" class="dropdown-item btn-clear" data-clear-url="{{ log.clear }}" data-target="input-log-{{ i }}"><i class="fa-solid fa-eraser me-2"></i>{{ button_clear }}</button></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><button type="button" class="dropdown-item text-danger btn-delete" data-delete-url="{{ log.delete }}"><i class="fa-regular fa-trash-can me-2"></i>{{ button_delete }}</button></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% set i = i + 1 %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="tab-content">
+        {% set i = 0 %}
+        {% for log in logs %}
+          <div class="tab-pane fade{% if i == 0 %} show active{% endif %}" id="list-log-{{ i }}" role="tabpanel" aria-labelledby="list-log-{{ i }}-list">
+            {% if log.error %}
+              <div class="alert alert-danger">{{ log.error }}</div>
+            {% endif %}
+            <textarea id="input-log-{{ i }}" class="form-control" rows="15" readonly>{{ log.output }}</textarea>
+          </div>
+          {% set i = i + 1 %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</form>
+<style>
+.list-group-item {
+    cursor: pointer;
+}
+
+.list-group-item .btn-group .dropdown-toggle {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.list-group-item .btn-group .dropdown-toggle:hover {
+    color: #6c757d;
+    background: transparent !important;
+    border: none !important;
+}
+
+.list-group-item .btn-group .dropdown-toggle:focus {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.list-group-item .btn-group .dropdown-toggle:active {
+    background: transparent !important;
+    border: none !important;
+}
+
+.list-group-item.active .dropdown-toggle {
+    color: #fff !important;
+}
+
+.list-group-item.active .dropdown-toggle:hover {
+    color: #fff !important;
+    background: transparent !important;
+}
+
+/* Checkbox styles when list-group-item is active */
+.list-group-item.active .form-check-input {
+    background-color: #fff !important;
+    border-color: #fff !important;
+}
+
+.list-group-item.active .form-check-input:checked {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23007bff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.list-group-item.active .form-check-input:focus {
+    border-color: #fff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Indeterminate state styles */
+.form-check-input:indeterminate {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e") !important;
+}
+
+/* Indeterminate state in active list-group-item */
+.list-group-item.active .form-check-input:indeterminate {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23007bff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e") !important;
+}
+
+.list-group {
+    height: 500px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.tab-content {
+    height: 500px;
+}
+
+.tab-content textarea {
+    height: 500px !important;
+    resize: none;
+    overflow-y: auto;
+}
+</style>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+    function updateSelectAll() {
+        var $select_all = $('#input-select-all');
+        var $checkboxes = $('input[name="selected[]"]');
+        var total_checkboxes = $checkboxes.length;
+        var checked_checkboxes = $checkboxes.filter(':checked').length;
+
+        if (checked_checkboxes === 0) {
+            $select_all.prop('checked', false);
+            $select_all.prop('indeterminate', false);
+        } else if (checked_checkboxes === total_checkboxes) {
+            $select_all.prop('checked', true);
+            $select_all.prop('indeterminate', false);
+        } else {
+            $select_all.prop('checked', false);
+            $select_all.prop('indeterminate', true);
+        }
+    }
+
+    // Handle individual checkbox changes
+    $(document).on('change', 'input[name="selected[]"]', function() {
+        updateSelectAll();
+    });
+
+    // Handle select all checkbox click
+    $(document).on('click', '#input-select-all', function() {
+        $('input[name="selected[]"]').prop('checked', $(this).prop('checked'));
+        $(this).prop('indeterminate', false);
+    });
+
+    // Initialize select all checkbox state on page load
+    updateSelectAll();
+
+    // Auto-scroll textarea to bottom on page load
+    $('.tab-pane.active textarea').each(function() {
+        this.scrollTop = this.scrollHeight;
+    });
+
+    // Auto-scroll when switching tabs
+    $('.list-group [data-bs-toggle="list"]').on('shown.bs.tab', function() {
+        var targetId = $(this).attr('data-bs-target');
+        var textarea = $(targetId).find('textarea')[0];
+
+        if (textarea) {
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+    });
+
+    // Handle clear buttons
+    $('.btn-clear').on('click', function() {
+        var button = $(this);
+        var url = button.attr('data-clear-url');
+        var targetId = button.attr('data-target');
+
+        if (confirm('{{ text_confirm }}')) {
+            // Remember which file was active before clearing
+            var active_tab = $('.list-group-item-action.active');
+            var active_index = active_tab.length ? active_tab.index() - 1 : 0; // -1 because first item is header
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                beforeSend: function() {
+                    button.prop('disabled', true);
+                },
+                complete: function() {
+                    button.prop('disabled', false);
+                },
+                success: function(json) {
+                    if (json['error']) {
+                        alert(json['error']);
+                    }
+
+                    if (json['success']) {
+                        alert(json['success']);
+                        $('#' + targetId).val('');
+
+                        // Reload the list to update file sizes and total size
+                        $('#list').load('index.php?route=tool/log.list&user_token={{ user_token }}', function() {
+                            // After list is reloaded, restore the active tab
+                            setTimeout(function() {
+                                var new_active_item = $('.list-group-item-action').eq(active_index);
+
+                                if (new_active_item.length) {
+                                    $('.list-group-item-action').removeClass('active');
+                                    $('.tab-pane').removeClass('show active');
+
+                                    new_active_item.addClass('active');
+
+                                    var target = new_active_item.attr('data-bs-target');
+
+                                    if (target) {
+                                        $(target).addClass('show active');
+                                    }
+
+                                    var textarea = $(target).find('textarea')[0];
+
+                                    if (textarea) {
+                                        textarea.scrollTop = textarea.scrollHeight;
+                                    }
+                                }
+                            }, 0);
+                        });
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('Error occurred');
+                    console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+    });
+
+    // Handle delete buttons
+    $('.btn-delete').on('click', function() {
+        var button = $(this);
+        var url = button.attr('data-delete-url');
+
+        if (confirm('{{ text_confirm }}')) {
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    user_token: '{{ user_token }}'
+                },
+                beforeSend: function() {
+                    button.prop('disabled', true);
+                },
+                complete: function() {
+                    button.prop('disabled', false);
+                },
+                success: function(json) {
+                    if (json['error']) {
+                        alert(json['error']);
+                    }
+
+                    if (json['success']) {
+                        alert(json['success']);
+                        location.reload();
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('Error occurred');
+                    console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+//--></script>

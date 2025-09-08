@@ -30,7 +30,7 @@ $config->set('application', APPLICATION);
 date_default_timezone_set($config->get('date_timezone'));
 
 // Logging
-$log = new \Opencart\System\Library\Log($config->get('error_filename'));
+$log = new \Opencart\System\Library\Log($config->get('error_filename'), $config);
 $registry->set('log', $log);
 
 // Error Handler
