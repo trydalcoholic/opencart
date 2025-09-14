@@ -12,14 +12,35 @@ class Product extends \Opencart\System\Engine\Controller {
 	 * @return ?\Opencart\System\Engine\Action
 	 */
 	public function index() {
+		// Language
 		$this->load->language('product/product');
 
+		$language_code = (string)$this->config->get('config_language');
+
+		$query_keys = [
+			'category_id',
+			'description',
+			'filter',
+			'limit',
+			'manufacturer_id',
+			'order',
+			'page',
+			'path',
+			'product_id',
+			'search',
+			'sort',
+			'sub_category',
+			'tag'
+		];
+
+		// Select only the query parameters from $this->request->get that will be used, and add the language code to the collection
+		$query_params = collection($this->request->get)->only($query_keys)->put('language', $language_code);
+
+		// This helps quickly generate URLs with only the language code parameter
+		$query_language = $query_params->only(['language'])->toQueryString();
+
 		// Product
-		if (isset($this->request->get['product_id'])) {
-			$product_id = (int)$this->request->get['product_id'];
-		} else {
-			$product_id = 0;
-		}
+		$product_id = (int)$query_params->get('product_id', 0);
 
 		$this->load->model('catalog/product');
 
@@ -32,7 +53,7 @@ class Product extends \Opencart\System\Engine\Controller {
 		$this->document->setTitle($product_info['meta_title']);
 		$this->document->setDescription($product_info['meta_description']);
 		$this->document->setKeywords($product_info['meta_keyword']);
-		$this->document->addLink($this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_id), 'canonical');
+		$this->document->addLink($this->url->link('product/product', $query_params->only(['language', 'product_id'])->toQueryString()), 'canonical');
 
 		$this->document->addScript('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');
 		$this->document->addStyle('catalog/view/javascript/jquery/magnific/magnific-popup.css');
@@ -41,16 +62,16 @@ class Product extends \Opencart\System\Engine\Controller {
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home', 'language=' . $this->config->get('config_language'))
+			'href' => $this->url->link('common/home', $query_language)
 		];
 
 		// Category
 		$this->load->model('catalog/category');
 
-		if (isset($this->request->get['path'])) {
+		if ($query_params->has('path')) {
 			$path = '';
 
-			$parts = explode('_', (string)$this->request->get['path']);
+			$parts = explode('_', (string)$query_params->get('path'));
 
 			$category_id = (int)array_pop($parts);
 
@@ -64,9 +85,11 @@ class Product extends \Opencart\System\Engine\Controller {
 				$category_info = $this->model_catalog_category->getCategory((int)$path_id);
 
 				if ($category_info) {
+					$params = $query_params->only(['language'])->merge(['path' => $path]);
+
 					$data['breadcrumbs'][] = [
 						'text' => $category_info['name'],
-						'href' => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=' . $path)
+						'href' => $this->url->link('product/category', $params->toQueryString())
 					];
 				}
 			}
@@ -75,27 +98,11 @@ class Product extends \Opencart\System\Engine\Controller {
 			$category_info = $this->model_catalog_category->getCategory($category_id);
 
 			if ($category_info) {
-				$url = '';
-
-				if (isset($this->request->get['sort'])) {
-					$url .= '&sort=' . $this->request->get['sort'];
-				}
-
-				if (isset($this->request->get['order'])) {
-					$url .= '&order=' . $this->request->get['order'];
-				}
-
-				if (isset($this->request->get['page'])) {
-					$url .= '&page=' . $this->request->get['page'];
-				}
-
-				if (isset($this->request->get['limit'])) {
-					$url .= '&limit=' . $this->request->get['limit'];
-				}
+				$params = $query_params->only(['language', 'limit', 'order', 'page', 'path', 'sort']);
 
 				$data['breadcrumbs'][] = [
 					'text' => $category_info['name'],
-					'href' => $this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=' . $this->request->get['path'] . $url)
+					'href' => $this->url->link('product/category', $params->toQueryString())
 				];
 			}
 		}
@@ -103,144 +110,42 @@ class Product extends \Opencart\System\Engine\Controller {
 		// Manufacturer
 		$this->load->model('catalog/manufacturer');
 
-		if (isset($this->request->get['manufacturer_id'])) {
+		if ($query_params->has('manufacturer_id')) {
 			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_brand'),
-				'href' => $this->url->link('product/manufacturer', 'language=' . $this->config->get('config_language'))
+				'href' => $this->url->link('product/manufacturer', $query_language)
 			];
 
-			$url = '';
-
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
-
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
-
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
-
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
-
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($this->request->get['manufacturer_id']);
+			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer((int)$query_params->get('manufacturer_id'));
 
 			if ($manufacturer_info) {
+				$params = $query_params->only(['language', 'limit', 'manufacturer_id', 'order', 'page', 'sort']);
+
 				$data['breadcrumbs'][] = [
 					'text' => $manufacturer_info['name'],
-					'href' => $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $this->request->get['manufacturer_id'] . $url)
+					'href' => $this->url->link('product/manufacturer.info', $params->toQueryString())
 				];
 			}
 		}
 
-		if (isset($this->request->get['search']) || isset($this->request->get['tag'])) {
-			$url = '';
-
-			if (isset($this->request->get['search'])) {
-				$url .= '&search=' . $this->request->get['search'];
-			}
-
-			if (isset($this->request->get['tag'])) {
-				$url .= '&tag=' . $this->request->get['tag'];
-			}
-
-			if (isset($this->request->get['description'])) {
-				$url .= '&description=' . $this->request->get['description'];
-			}
-
-			if (isset($this->request->get['category_id'])) {
-				$url .= '&category_id=' . $this->request->get['category_id'];
-			}
-
-			if (isset($this->request->get['sub_category'])) {
-				$url .= '&sub_category=' . $this->request->get['sub_category'];
-			}
-
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
-
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
-
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
-
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
+		if ($query_params->has('search') || $query_params->has('tag')) {
+			$params = $query_params->except(['path', 'manufacturer_id', 'product_id', 'filter']);
 
 			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_search'),
-				'href' => $this->url->link('product/search', 'language=' . $this->config->get('config_language') . $url)
+				'href' => $this->url->link('product/search', $params->toQueryString())
 			];
-		}
-
-		$url = '';
-
-		if (isset($this->request->get['path'])) {
-			$url .= '&path=' . $this->request->get['path'];
-		}
-
-		if (isset($this->request->get['filter'])) {
-			$url .= '&filter=' . $this->request->get['filter'];
-		}
-
-		if (isset($this->request->get['manufacturer_id'])) {
-			$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
-		}
-
-		if (isset($this->request->get['search'])) {
-			$url .= '&search=' . $this->request->get['search'];
-		}
-
-		if (isset($this->request->get['tag'])) {
-			$url .= '&tag=' . $this->request->get['tag'];
-		}
-
-		if (isset($this->request->get['description'])) {
-			$url .= '&description=' . $this->request->get['description'];
-		}
-
-		if (isset($this->request->get['category_id'])) {
-			$url .= '&category_id=' . $this->request->get['category_id'];
-		}
-
-		if (isset($this->request->get['sub_category'])) {
-			$url .= '&sub_category=' . $this->request->get['sub_category'];
-		}
-
-		if (isset($this->request->get['sort'])) {
-			$url .= '&sort=' . $this->request->get['sort'];
-		}
-
-		if (isset($this->request->get['order'])) {
-			$url .= '&order=' . $this->request->get['order'];
-		}
-
-		if (isset($this->request->get['page'])) {
-			$url .= '&page=' . $this->request->get['page'];
-		}
-
-		if (isset($this->request->get['limit'])) {
-			$url .= '&limit=' . $this->request->get['limit'];
 		}
 
 		$data['breadcrumbs'][] = [
 			'text' => $product_info['name'],
-			'href' => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . $url . '&product_id=' . $product_id)
+			'href' => $this->url->link('product/product', $query_params->toQueryString())
 		];
 
 		$data['heading_title'] = $product_info['name'];
 
 		$data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);
-		$data['text_login'] = sprintf($this->language->get('text_login'), $this->url->link('account/login', 'language=' . $this->config->get('config_language')), $this->url->link('account/register', 'language=' . $this->config->get('config_language')));
+		$data['text_login'] = sprintf($this->language->get('text_login'), $this->url->link('account/login', $query_language), $this->url->link('account/register', $query_language));
 		$data['text_reviews'] = sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']);
 
 		$data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
@@ -251,7 +156,9 @@ class Product extends \Opencart\System\Engine\Controller {
 
 		$this->session->data['upload_token'] = oc_token(32);
 
-		$data['upload'] = $this->url->link('tool/upload', 'language=' . $this->config->get('config_language') . '&upload_token=' . $this->session->data['upload_token']);
+		$params = $query_params->only(['language'])->merge(['upload_token' => $this->session->data['upload_token']]);
+
+		$data['upload'] = $this->url->link('tool/upload', $params->toQueryString());
 
 		$data['product_id'] = $product_id;
 
@@ -263,7 +170,9 @@ class Product extends \Opencart\System\Engine\Controller {
 			$data['manufacturer'] = '';
 		}
 
-		$data['manufacturers'] = $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $product_info['manufacturer_id']);
+		$params = $query_params->only(['language'])->merge(['manufacturer_id' => $product_info['manufacturer_id']]);
+
+		$data['manufacturers'] = $this->url->link('product/manufacturer.info', $params->toQueryString());
 		$data['model'] = $product_info['model'];
 
 		$data['product_codes'] = [];
@@ -309,8 +218,8 @@ class Product extends \Opencart\System\Engine\Controller {
 		$data['review_status'] = (int)$this->config->get('config_review_status');
 		$data['review'] = $this->load->controller('product/review');
 
-		$data['wishlist_add'] = $this->url->link('account/wishlist.add', 'language=' . $this->config->get('config_language'));
-		$data['compare_add'] = $this->url->link('product/compare.add', 'language=' . $this->config->get('config_language'));
+		$data['wishlist_add'] = $this->url->link('account/wishlist.add', $language_code);
+		$data['compare_add'] = $this->url->link('product/compare.add', $language_code);
 
 		// Image
 		$this->load->model('tool/image');
@@ -440,7 +349,7 @@ class Product extends \Opencart\System\Engine\Controller {
 			$data['minimum'] = 1;
 		}
 
-		$data['share'] = $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_id);
+		$data['share'] = $this->url->link('product/product', $query_params->only(['language', 'product_id'])->toQueryString());
 
 		// Attribute Groups
 		$data['attribute_groups'] = $this->model_catalog_product->getAttributes($product_id);
@@ -455,9 +364,13 @@ class Product extends \Opencart\System\Engine\Controller {
 			$tags = explode(',', $product_info['tag']);
 
 			foreach ($tags as $tag) {
+				$tag = trim($tag);
+
+				$params = $query_params->only(['language'])->merge(['tag' => $tag]);
+
 				$data['tags'][] = [
-					'tag'  => trim($tag),
-					'href' => $this->url->link('product/search', 'language=' . $this->config->get('config_language') . '&tag=' . trim($tag))
+					'tag'  => $tag,
+					'href' => $this->url->link('product/search', $params->toQueryString())
 				];
 			}
 		}

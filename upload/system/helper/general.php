@@ -370,3 +370,12 @@ function oc_validate_url(string $url): bool {
 function oc_validate_path(string $keyword): bool {
 	return !preg_match('/[^\p{Latin}\p{Cyrillic}\p{Greek}0-9\/\-\_]+/u', $keyword);
 }
+
+/**
+ * @param array<array-key, mixed> $items
+ *
+ * @return \Opencart\System\Helper\Collection
+ */
+function collection(array $items = []): \Opencart\System\Helper\Collection {
+	return new \Opencart\System\Helper\Collection($items);
+}
