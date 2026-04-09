@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from "../../../../assets/framework";
 
 // Library
@@ -13,7 +12,7 @@ const language = loader.language('information/contact');
 // Storage
 const locations = loader.storage('information/location');
 
-class InformationContact extends WebComponent {
+export default class {
     async connected() {
 
     }
@@ -55,5 +54,3 @@ class InformationContact extends WebComponent {
 
     }
 }
-
-customElements.define('information-contact', InformationContact);
