@@ -220,13 +220,9 @@ class CurlyTag {
                 return value.join(seperator);
             },
             reverse: (value) => {
-                if (Array.isArray(value)) {
-                    return [...value].reverse();
-                }
+                if (Array.isArray(value)) return [...value].reverse();
 
-                if (typeof value === 'string') {
-                    return value.split('').reverse().join('');
-                }
+                if (typeof value === 'string') return value.split('').reverse().join('');
 
                 return value; // fallback: return unchanged
             },
