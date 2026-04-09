@@ -1,4 +1,4 @@
-import { loader } from '../../../assets/framework/index.js';
+import { loader } from '../../../assets/framework/library/loader.js';
 
 // Base
 const base = new URL(document.querySelector('base').href);
@@ -13,10 +13,11 @@ config.addPath('catalog/view/data/');
 
 // Testing Code
 config.cache.set('default', {
+    config_path: base + 'catalog/view/javascript/',
     config_name: 'OpenCart Store',
     config_logo: 'catalog/opencart-logo.png',
     config_url: 'http://localhost/opencart-master/upload/',
-    config_telephone: '01234 67890',
+    config_telephone: '01234 567890',
     config_language: 'en-gb',
     config_currency: 'EUR',
     config_customer_group_id: 1,
@@ -74,6 +75,6 @@ event.register(/template\/.+\/before/g, ({ path, data }) => {
     //}
 });
 
-export { loader };
+import '../../../assets/framework/component.js';
 
-import './component.js';
+export { loader };
