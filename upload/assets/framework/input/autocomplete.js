@@ -1,8 +1,6 @@
 import { WebComponent } from '../component.js';
 
 class XAutocomplete extends WebComponent {
-
-
     async render() {
         let name = this.getAttribute('name');
         let value = this.getAttribute('value');
