@@ -1,9 +1,6 @@
-import { WebComponent } from '../component.js';
 
-class AccountForgottenReset extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('account-forgotten-reset', AccountForgottenReset);

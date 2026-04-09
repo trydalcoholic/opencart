@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -7,7 +6,7 @@ const config = await loader.config('default');
 // Language
 const language = await loader.language('catalog/review');
 
-class CatalogReview extends WebComponent {
+export default class {
     async render() {
 
     }
@@ -17,8 +16,6 @@ class CatalogReview extends WebComponent {
 
     }
 }
-
-customElements.define('catalog-review', CatalogReview);
 
 
 // Forms

@@ -1,9 +1,8 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 const language = loader.language('account/download');
 
-class AccountDownload extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -12,5 +11,3 @@ class AccountDownload extends WebComponent {
         return this.load.template('account/download', { ...data, ...language });
     }
 }
-
-customElements.define('account-download', AccountDownload);

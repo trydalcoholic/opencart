@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -13,7 +12,7 @@ const articles = await loader.storage('cms/article-1');
 // Information
 const informations = await loader.storage('information/information');
 
-class CommonFooter extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -33,5 +32,3 @@ class CommonFooter extends WebComponent {
         return loader.template('common/footer', { ...data, ...language, ...config });
     }
 }
-
-customElements.define('common-footer', CommonFooter);

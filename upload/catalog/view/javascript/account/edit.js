@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
@@ -7,7 +6,7 @@ const language = await loader.language('account/edit');
 // Library
 const session = await loader.library('session');
 
-class AccountEdit extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -37,5 +36,3 @@ class AccountEdit extends WebComponent {
         this.$button.state = 'loading';
     }
 }
-
-customElements.define('account-edit', AccountEdit);

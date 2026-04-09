@@ -1,6 +1,6 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class ProductCompare extends WebComponent {
+export default class {
     async connected() {
 
 
@@ -8,5 +8,3 @@ class ProductCompare extends WebComponent {
 
     }
 }
-
-customElements.define('product-compare', ProductCompare);

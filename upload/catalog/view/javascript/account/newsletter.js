@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
@@ -7,7 +6,7 @@ const language = await loader.language('account/edit');
 // Library
 const session = loader.library('session');
 
-class AccountNewsletter extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -23,5 +22,3 @@ class AccountNewsletter extends WebComponent {
 
     }
 }
-
-customElements.define('account-newsletter', AccountNewsletter);

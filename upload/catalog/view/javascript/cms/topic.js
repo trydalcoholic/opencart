@@ -1,12 +1,10 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class CmsTopic extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('cms-topic', CmsTopic);
 
 $('#button-search').bind('click', function() {
     url = 'index.php?route=cms/topic&language={{ language }}';

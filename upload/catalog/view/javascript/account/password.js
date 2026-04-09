@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Library
@@ -7,7 +6,7 @@ const session = loader.library('session');
 // Language
 const language = loader.language('account/password');
 
-class AccountPassword extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -22,5 +21,3 @@ class AccountPassword extends WebComponent {
 
     }
 }
-
-customElements.define('account-password', AccountPassword);

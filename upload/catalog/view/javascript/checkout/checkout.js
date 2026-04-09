@@ -1,12 +1,10 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class CheckoutCheckout extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('checkout-checkout', CheckoutCheckout);
 
 // Account
 $('input[name=\'account\']').on('click', function() {

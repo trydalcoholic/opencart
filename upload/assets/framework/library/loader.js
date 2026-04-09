@@ -16,12 +16,26 @@ class Loader {
         this.data.set('template', template);
     }
 
-    async config(path) {
-        event.trigger('config/' + path + '/before', { path });
+    async controller(path) {
+        event.trigger('controller/' + path + '/before', { path });
 
-        let output = await config.fetch(path);
+        let pos = path.indexOf('.');
 
-        event.trigger('config/' + path + '/after', { path, output });
+        if (pos !== undefined) {
+            //path.substr()
+        }
+
+        let test = await config.fetch('default');
+
+        let controller = await import(test.config_path + path + '.js');
+
+        console.log(new controller.default());
+
+        if (controller) {
+
+        }
+
+        event.trigger('controller/' + path + '/after', { path, output });
 
         return output;
     }
@@ -70,6 +84,16 @@ class Loader {
         let output = this.data.get(path);
 
         event.trigger('library/' + path + '/after', { path, output });
+
+        return output;
+    }
+
+    async config(path) {
+        event.trigger('config/' + path + '/before', { path });
+
+        let output = await config.fetch(path);
+
+        event.trigger('config/' + path + '/after', { path, output });
 
         return output;
     }

@@ -1,10 +1,9 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
 const language = loader.language('account/edit');
 
-class CmsArticle extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -23,5 +22,3 @@ class CmsArticle extends WebComponent {
         return loader.template('cms/article', { ...data, ...config });
     }
 }
-
-customElements.define('cms-article', CmsArticle);

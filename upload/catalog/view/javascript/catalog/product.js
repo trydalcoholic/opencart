@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -14,10 +13,11 @@ const tax = await loader.library('tax');
 // Currency
 const currency = local.has('currency') ? local.get('currency') : config.config_currency;
 
-class CatalogProduct extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
+        // Product Info
         // Product Info
         let product = loader.storage('product/product-' + this.getAttribute('product_id'));
 
@@ -135,7 +135,6 @@ class CatalogProduct extends WebComponent {
     }
 }
 
-customElements.define('catalog-product', CatalogProduct);
 /*
 $(document).ready(function() {
     $('.magnific-popup').magnificPopup({

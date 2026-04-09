@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
@@ -7,7 +6,7 @@ const language = await loader.language('account/login');
 // Library
 const session = await loader.library('session');
 
-class AccountLogin extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -52,8 +51,6 @@ class AccountLogin extends WebComponent {
         });
     }
 }
-
-customElements.define('account-login', AccountLogin);
 
 /*
 $('#form-login').on('submit', function(e) {

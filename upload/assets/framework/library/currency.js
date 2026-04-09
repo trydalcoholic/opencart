@@ -1,8 +1,10 @@
 import { loader } from './loader.js';
 
-const currencies = await loader.storage('localisation/currency');
-
 export default class Currency {
+    constructor() {
+        this.currencies = loader.storage('localisation/currency');
+    }
+
     /**
      * This function can prefix/suffix your string.
      *
@@ -15,9 +17,9 @@ export default class Currency {
      * @param {string} format Optional and will be added after the string
      */
     format(number, code, value = 0, format = true) {
-        if (!code in currencies) return number;
+        if (!code in this.currencies) return number;
 
-        let currency = currencies[code];
+        let currency = this.currencies[code];
 
         value = parseFloat(value ? value : currency.value);
 
@@ -65,8 +67,8 @@ export default class Currency {
     }
 
     convert(value, from, to) {
-        if (!from in currencies || !to in currencies) return value;
+        if (!from in this.currencies || !to in this.currencies) return value;
 
-        return value * (currencies[to].value / currencies[from].value);
+        return value * (this.currencies[to].value / this.currencies[from].value);
     }
 }

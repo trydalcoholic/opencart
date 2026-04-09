@@ -1,9 +1,7 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class AccountOrderList extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('account-order-list', AccountOrderList);

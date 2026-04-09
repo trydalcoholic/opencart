@@ -1,4 +1,6 @@
-class XAffiliate extends WebComponent {
+import {Controller} from "../../../../assets/framework/library/controller";
+
+export default class {
     data = [];
 
     async connected() {
@@ -7,8 +9,6 @@ class XAffiliate extends WebComponent {
         this.innerHTML = this.load.template('account/address', this.language.all());
     }
 }
-
-customElements.define('x-affiliate', XAffiliate);
 
 
 

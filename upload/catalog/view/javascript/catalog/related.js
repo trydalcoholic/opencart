@@ -1,9 +1,7 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class CatalogRelated extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('catalog-related', CatalogRelated);

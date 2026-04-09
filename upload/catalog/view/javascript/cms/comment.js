@@ -1,7 +1,6 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
-class CmsComment extends WebComponent {
+export default class {
     async render() {
 
 
@@ -10,8 +9,6 @@ class CmsComment extends WebComponent {
 
     }
 }
-
-customElements.define('cms-comment', CmsComment);
 
 $('#comment').on('click', '.pagination a', function(e) {
     e.preventDefault();

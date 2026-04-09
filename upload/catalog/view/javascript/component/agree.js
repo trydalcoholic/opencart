@@ -1,7 +1,6 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
-class ComponentAgree extends WebComponent {
+export default class {
     get value() {
         return this.getAttribute('value');
     }
@@ -34,5 +33,3 @@ class ComponentAgree extends WebComponent {
         }
     }
 }
-
-customElements.define('component-Agree', ComponentAgree);

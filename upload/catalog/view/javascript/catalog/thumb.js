@@ -1,5 +1,4 @@
-import { WebComponent } from '../component.js';
-import { loader } from "../index.js";
+import { loader } from '../index.js';
 
 // Config
 const config = await loader.config('default');
@@ -14,7 +13,7 @@ const tax = await loader.library('tax');
 // Currency
 const currency = local.has('currency') ? local.get('currency') : config.config_currency;
 
-class ProductThumb extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -53,5 +52,3 @@ class ProductThumb extends WebComponent {
 
     }
 }
-
-customElements.define('product-thumb', ProductThumb);

@@ -1,12 +1,9 @@
-import { WebComponent } from '../component.js';
-
-class AccountSubscription extends WebComponent {
+export default class {
     async render() {
 
     }
 }
 
-customElements.define('account-subscription', AccountSubscription);
 /*
 $('#button-cancel').on('click', function(e) {
     e.preventDefault();

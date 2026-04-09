@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Library
@@ -7,7 +6,7 @@ const session = loader.library('session');
 // Language
 const language = loader.language('account/edit');
 
-class AccountWishlist extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -28,7 +27,6 @@ class AccountWishlist extends WebComponent {
     }
 }
 
-customElements.define('account-wishlist', AccountWishlist);
 /*
 $('#wishlist').on('click', '.btn-danger', function(e) {
     e.preventDefault();

@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -7,7 +6,7 @@ const config = await loader.config('default');
 // Language
 const language = loader.language('account/information');
 
-class InformationInformation extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -21,5 +20,3 @@ class InformationInformation extends WebComponent {
         return loader.template('information/information', { ...data, ...language, ...config });
     }
 }
-
-customElements.define('information-information', InformationInformation);

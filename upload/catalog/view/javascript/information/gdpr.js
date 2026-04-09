@@ -1,6 +1,6 @@
-import { WebComponent } from '../component.js';
 
-class InformationGdpr extends WebComponent {
+
+export default class {
     async connected() {
 
     }
@@ -13,8 +13,6 @@ class InformationGdpr extends WebComponent {
         }
     }
 }
-
-customElements.define('Information-gdpr', InformationGdpr);
 
 $('input[name=\'action\']').on('change', function() {
 

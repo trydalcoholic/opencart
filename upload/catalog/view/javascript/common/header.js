@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -10,7 +9,7 @@ const language = await loader.language('common/header');
 // library
 const session = await loader.library('session');
 
-class CommonHeader extends WebComponent {
+export default class CommonHeader {
     render() {
         let data = {};
 
@@ -28,14 +27,12 @@ class CommonHeader extends WebComponent {
     register(e) {
         e.preventDefault();
 
-
+        console.log('register');
     }
 
     login(e) {
         e.preventDefault();
 
-
+        console.log('login');
     }
 }
-
-customElements.define('common-header', CommonHeader);

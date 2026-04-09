@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // library
@@ -13,7 +12,7 @@ const language = await loader.language('common/language');
 // Storage
 const languages = await loader.storage('localisation/language');
 
-class CommonLanguage extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -48,5 +47,3 @@ class CommonLanguage extends WebComponent {
         this.update();
     }
 }
-
-customElements.define('common-language', CommonLanguage);

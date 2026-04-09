@@ -1,6 +1,6 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class ProductList extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -9,5 +9,3 @@ class ProductList extends WebComponent {
         return this.render('catalog/product_info', { ...data, ...language, ...config });
     }
 }
-
-customElements.define('product-list', ProductList);

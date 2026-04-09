@@ -1,9 +1,7 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class CheckoutShippingMethod extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('checkout-shipping-method', CheckoutShippingMethod);

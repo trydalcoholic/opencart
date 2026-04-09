@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
@@ -7,7 +6,7 @@ const language = await loader.language('account/address');
 // Library
 const session = await loader.library('session');
 
-class AccountAddress extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -47,7 +46,6 @@ class AccountAddress extends WebComponent {
     }
 }
 
-customElements.define('account-address', AccountAddress);
 /*
 const address = document.getElementById('address');
 

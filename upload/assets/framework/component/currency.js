@@ -1,12 +1,6 @@
 import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
-// Library
-const currency = await loader.library('currency');
-
-// Storage
-const currencies = await loader.storage('localisation/currency');
-
 class XCurrency extends WebComponent {
     static observed = [
         'code',
@@ -46,9 +40,15 @@ class XCurrency extends WebComponent {
         this.setAttribute('value', value);
     }
 
-    async render() {
-        console.log(this.code);
+    async connected() {
+        // Library
+        this.currency = await loader.library('currency');
 
+        // Storage
+        this.currencies = await loader.storage('localisation/currency');
+    }
+
+    async render() {
         return this.currency.format(this.value, this.code);
     }
 }

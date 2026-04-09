@@ -1,10 +1,9 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
 const language = await loader.language('account/return');
 
-class AccountReturnForm extends WebComponent {
+export default class {
    render() {
        return loader.template('account/return', { ...language });
     }
@@ -14,5 +13,3 @@ class AccountReturnForm extends WebComponent {
 
     }
 }
-
-customElements.define('account-return-form', AccountReturnForm);

@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Language
@@ -7,16 +6,13 @@ const language = await loader.language('account/edit');
 // Library
 const session = await loader.library('session');
 
-class CheckoutCart extends WebComponent {
+export default class {
     async render() {
 
 
         return
     }
 }
-
-customElements.define('checkout-cart', CheckoutCart);
-
 
 $('#shopping-cart').on('submit', '#output-cart form', function(e) {
     e.preventDefault();

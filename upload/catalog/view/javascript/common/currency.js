@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // library
@@ -13,7 +12,7 @@ const language = await loader.language('common/currency');
 // Storage
 const currencies = await loader.storage('localisation/currency');
 
-class CommonCurrency extends WebComponent {
+export default class {
     render() {
         let data = {};
 
@@ -54,5 +53,3 @@ class CommonCurrency extends WebComponent {
         }
     }
 }
-
-customElements.define('common-currency', CommonCurrency);

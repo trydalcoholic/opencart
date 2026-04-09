@@ -1,5 +1,3 @@
-import { loader } from '../index.js';
-
 export class WebComponent extends HTMLElement {
     constructor() {
         super();

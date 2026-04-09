@@ -1,4 +1,3 @@
-import { WebComponent } from '../component.js';
 import { loader } from '../index.js';
 
 // Config
@@ -10,7 +9,7 @@ const language = await loader.language('account/register');
 // Customer Groups
 const customer_groups = await loader.storage('customer/customer_group');
 
-class AccountRegister extends WebComponent {
+export default class {
     async render() {
         let data = {};
 
@@ -26,8 +25,6 @@ class AccountRegister extends WebComponent {
         }
 
         data.config_telephone_status = config.config_telephone_status;
-
-        console.log(data);
 
         return loader.template('account/register', { ...data, ...language, ...config });
     }
@@ -83,5 +80,3 @@ class AccountRegister extends WebComponent {
         //}
     }
 }
-
-customElements.define('account-register', AccountRegister);

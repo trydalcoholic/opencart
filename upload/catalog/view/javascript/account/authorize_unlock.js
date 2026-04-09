@@ -1,9 +1,7 @@
-import { WebComponent } from '../component.js';
+import { loader } from '../index.js';
 
-class XAccount extends WebComponent {
+export default class {
     async connected() {
 
     }
 }
-
-customElements.define('x-account', XAccount);
