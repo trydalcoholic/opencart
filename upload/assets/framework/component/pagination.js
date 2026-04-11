@@ -51,7 +51,7 @@ class XPagination extends WebComponent {
         this.setAttribute('page', value);
     }
 
-    async render() {
+    render() {
         let num_pages = Math.ceil(this.total / this.limit);
 
         let first = '';
