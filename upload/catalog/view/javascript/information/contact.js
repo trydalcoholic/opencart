@@ -45,7 +45,7 @@ export default class {
 
         data.locations = locations;
 
-        return await loader.template('information/contact', { ...data, ...language, ...config });
+        return loader.template('information/contact', { ...data, ...language, ...config });
     }
 
     onSubmit(e) {
