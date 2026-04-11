@@ -9,7 +9,7 @@ const language = await loader.language('common/header');
 // library
 const session = await loader.library('session');
 
-export default class CommonHeader {
+export default class {
     render() {
         let data = {};
 
@@ -28,6 +28,8 @@ export default class CommonHeader {
         e.preventDefault();
 
         console.log('register');
+
+        console.log(this.$contact);
     }
 
     login(e) {
