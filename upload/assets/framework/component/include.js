@@ -5,36 +5,30 @@ import { loader } from '../index.js';
 const config = await loader.config('default');
 
 class XInclude extends WebComponent {
-    static observed = ['src'];
-
-    controller = '';
+    observed  = ['src'];
 
     get src() {
+        console.log(this.getAttribute('src'));
+
         return this.getAttribute('src');
     }
 
     set src(src) {
-        this.setAttribute('src', src);
+        console.log('set src');
+        console.log(src);
+
+        //this.setAttribute('src', src);
     }
 
     async render() {
         // Get the source HTML to load
-        if (!this.src) return;
+        //if (!this.src) return;
 
         let controller = await import(config.config_path + this.src + '.js');
 
-        this.controller = new controller.default;
+        let test = new controller.default();
 
-        let response = this.controller.render();
-
-        response.then(this.compile.bind(this));
-
-
-
-    }
-
-    compile(html) {
-        this.innerHTML = html;
+        this.innerHTML = await test.render();
 
         // Attach Events based on elements that have data-bind and data-on attributes
         let elements = this.querySelectorAll('[data-bind], [data-on]');
@@ -42,7 +36,7 @@ class XInclude extends WebComponent {
         for (let element of elements) {
             // Binds the element to an attribute by name.
             if (element.hasAttribute('data-bind')) {
-                this.controller['$' + element.getAttribute('data-bind')] = element;
+                test['$' + element.getAttribute('data-bind')] = element;
 
                 element.removeAttribute('data-bind');
             }
@@ -50,8 +44,8 @@ class XInclude extends WebComponent {
             if (element.hasAttribute('data-on')) {
                 let part = element.getAttribute('data-on').split(':');
 
-                if (part[1] !== undefined && part[1] in this.controller) {
-                    element.addEventListener(part[0], this.controller[part[1]].bind(this.controller));
+                if (part[1] !== undefined && part[1] in test) {
+                    element.addEventListener(part[0], test[part[1]].bind(test));
 
                     element.removeAttribute('data-on');
                 }
