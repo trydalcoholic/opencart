@@ -11,7 +11,7 @@ class XSwitch extends WebComponent {
         }
     }
 
-    async render() {
+    render() {
         let html  = '';
 
         html += '<div class="form-switch form-switch-lg">';
