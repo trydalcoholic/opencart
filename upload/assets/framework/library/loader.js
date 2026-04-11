@@ -25,7 +25,7 @@ class Loader {
             //path.substr()
         }
 
-        let test = await config.fetch('default');
+        let test1 = await config.fetch('default');
 
         let controller = await import(test.config_path + path + '.js');
 
