@@ -7,7 +7,7 @@ const language = await loader.language('common/menu');
 const categories = await loader.storage('catalog/category');
 
 export default class {
-    render() {
+    async render() {
         let data = {};
 
         data.categories = categories;
