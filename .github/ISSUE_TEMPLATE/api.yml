@@ -1,0 +1,10 @@
+name: API Issue
+description: Report API related issues
+title: "[API]: "
+labels: ["area: api"]
+body:
+  - type: textarea
+    attributes:
+      label: Describe the issue
+    validations:
+      required: true
